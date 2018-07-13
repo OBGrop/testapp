@@ -3,8 +3,7 @@ import React, { Component } from 'react';
 import { Button, Text, View, TextInput } from 'react-native';
 import { createStackNavigator, createSwitchNavigator } from 'react-navigation';
 import { FormLabel, FormInput, FormValidationMessage,  } from 'react-native-elements'
-import { MenScreen } from './men'
-import {WomenScreen } from './women'
+
 
 class HomeScreen extends React.Component {
     render() {
@@ -14,7 +13,7 @@ class HomeScreen extends React.Component {
                 <Text></Text>
                 <Button
                     title="You are men ? ,Click"
-                    onPress={() => this.props.navigation.navigate('Men', {
+                    onPress={() => this.props.navigation.navigate('Details', {
                             sex: 'men',
                         })
                     }
@@ -108,10 +107,8 @@ class InputAuthentication extends React.Component {
     this.state = {
       dataAuthen:{
         username:'',
-        password:''
-      }
-      
-       };
+        password:''}
+      };
   }
 
   render(){ 
@@ -148,7 +145,13 @@ class InputAuthentication extends React.Component {
 
         <Button
           title="Next"
-          onPress={() => this.props.navigation.navigate('Men') }
+          onPress={() => this.props.navigation.navigate('Show',
+                    {
+                      sex: sex,
+                      data: this.props.navigation.state.params.data,
+                      dataAuthen: this.state.dataAuthen 
+                    }) 
+                  }
         />
         <Text></Text>
         <Button
@@ -164,11 +167,36 @@ class InputAuthentication extends React.Component {
 
 } 
 
+class ShowData extends React.Component {
+  render(){
+    console.log('navigation+++',this.props.navigation)
+    const {navigation} = this.props
+    const sex = navigation.state.params.sex
+    const name = navigation.state.params.data.name
+    const age = navigation.state.params.data.age
+    const username = navigation.state.params.dataAuthen.username
+    const password = navigation.state.params.dataAuthen.password
+    return(
+        <View style={{padding: 20,paddingLeft:30, }}>
+          <Text>YOUR DATA!!</Text>
+          <Text>name: {name}</Text>
+          <Text>Age: {age}</Text>
+          <Text>Sex: {sex}</Text>
+          <Text>Useranme: {username}</Text>
+          <Text>Password: {password}</Text>
+          <Text></Text>
+
+        </View>
+    )
+  }
+}
+
 const RootStack = createStackNavigator(
   {
     Home: HomeScreen,
     Details: DetailsScreen,
     Authen: InputAuthentication,
+    Show: ShowData,
     // Men: MenScreen,
     // Women: WomenScreen
   },
